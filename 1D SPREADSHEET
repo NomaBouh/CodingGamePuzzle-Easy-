@@ -1,0 +1,37 @@
+n = int(input())
+operations = [input().split() for _ in range(n)]
+values = [None] * n
+
+def resolve_value(arg, values):
+    if arg[0] == "$":
+        ref = int(arg[1:])
+        return values[ref]
+    else:
+        return int(arg)
+
+progress_made = True
+
+while progress_made:
+    progress_made = False
+    for i in range(n):
+        if values[i] is not None:
+            continue
+        operation, arg_1, arg_2 = operations[i]
+        if operation == "VALUE":
+            values[i] = resolve_value(arg_1, values)
+            progress_made = True
+        else:
+            if arg_1[0] == "$" and values[int(arg_1[1:])] is None or arg_2[0] == "$" and values[int(arg_2[1:])] is None:
+                continue
+            val_1 = resolve_value(arg_1, values)
+            val_2 = resolve_value(arg_2, values)
+            if operation == "ADD":
+                values[i] = val_1 + val_2
+            elif operation == "SUB":
+                values[i] = val_1 - val_2
+            elif operation == "MULT":
+                values[i] = val_1 * val_2
+            progress_made = True
+
+for value in values:
+    print(value)
