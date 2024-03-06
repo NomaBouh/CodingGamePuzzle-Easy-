@@ -1,0 +1,12 @@
+while True:
+    shoot = 0
+    shootnum = 0
+    heighttop = 0
+    for i in range(8):
+        mountain_h = int(input())
+        if( heighttop < mountain_h):
+            heighttop = mountain_h
+            shootnum = shoot
+        shoot += 1
+    
+    print(shootnum)
