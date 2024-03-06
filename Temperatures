@@ -1,0 +1,29 @@
+using System;
+using System.Linq;
+
+class Solution
+{
+    static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine());
+        
+        if (n == 0)
+        {
+            Console.WriteLine(0);
+            return;
+        }
+
+        int[] temperatures = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
+        int closest = temperatures[0];
+
+        for (int i = 1; i < n; i++)
+        {
+            if (Math.Abs(temperatures[i]) < Math.Abs(closest) || (Math.Abs(temperatures[i]) == Math.Abs(closest) && temperatures[i] > closest))
+            {
+                closest = temperatures[i];
+            }
+        }
+
+        Console.WriteLine(closest);
+    }
+}
