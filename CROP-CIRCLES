@@ -1,0 +1,41 @@
+def is_inside_circle(center_x, center_y, radius, x, y):
+    return (x - center_x) ** 2 + (y - center_y) ** 2 <= radius ** 2 + radius
+
+def apply_action(x, y, action):
+    if action == "mow":
+        farming_field[y][x] = '  '
+    elif action == "plant":
+        farming_field[y][x] = '{}'
+    elif action == "plantmow":
+        farming_field[y][x] = '  ' if farming_field[y][x] == '{}' else '{}'
+
+def draw_circle(center_x, center_y, radius, action):
+    for x in range(max(0, center_x - radius - 1), min(field_width, center_x + radius + 2)):
+        for y in range(max(0, center_y - radius - 1), min(field_height, center_y + radius + 2)):
+            if is_inside_circle(center_x, center_y, radius, x, y):
+                apply_action(x, y, action)
+
+instructions = input()
+
+ins = instructions.split(" ")
+
+field_width, field_height = 19, 25
+farming_field = [['{}' for _ in range(field_width)] for _ in range(field_height)]
+
+letter_to_index = {chr(i + 97): i for i in range(26)}
+
+for i in ins:
+    action = "mow"
+    if "PLANTMOW" in i:
+        i, action = i.replace("PLANTMOW", ""), "plantmow"
+    elif "PLANT" in i:
+        i, action = i.replace("PLANT", ""), "plant"
+    
+    x_center = letter_to_index[i[0]]
+    y_center = letter_to_index[i[1]]
+    radius = int(i[2:]) // 2
+
+    draw_circle(x_center, y_center, radius, action)
+
+for row in farming_field:
+    print(''.join(row))
