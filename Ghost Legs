@@ -1,0 +1,21 @@
+w, h = [int(i) for i in input().split()]
+diagram = []
+for i in range(h):
+    line = input()
+    diagram.append(line)
+
+top_labels = diagram[0].split()
+bottom_labels = diagram[-1].split()
+
+def follow_line_corrected(start_pos):
+    pos = start_pos * 3 
+    for line in diagram[1:h-1]:
+        if pos > 0 and line[pos-1] == '-':
+            pos -= 3
+        elif pos < w - 1 and line[pos+1] == '-':
+            pos += 3
+    return bottom_labels[pos // 3]
+
+connected_pairs_corrected = [(top, follow_line_corrected(i)) for i, top in enumerate(top_labels)]
+for k in range(len(connected_pairs_corrected)):
+    print(connected_pairs_corrected[k][0]+connected_pairs_corrected[k][1])
