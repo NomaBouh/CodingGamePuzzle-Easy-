@@ -1,0 +1,23 @@
+surface_n = int(input())
+land_x_prev = land_y_prev = 0
+landing_start = 0
+landing_end = 7000
+landing_height = 0
+for i in range(surface_n):
+    land_x, land_y = [int(j) for j in input().split()]
+    if(land_x_prev != 0 and land_y_prev == land_y):
+        landing_height = land_y
+        landing_start = land_x_prev
+        landing_end = land_x
+    land_x_prev, land_y_prev = land_x, land_y
+while True:
+    x, y, h_speed, v_speed, fuel, rotate, power = [int(i) for i in input().split()]
+    if(landing_start<x<landing_end):
+        dist = y-landing_height
+        if v_speed<-35:
+            power = 4
+        else:
+            power = 3
+        if(dist>1200 and v_speed>-45):
+            power = int(power*(1-dist/3000))
+    print("0 "+str(power))
