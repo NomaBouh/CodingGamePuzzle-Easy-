@@ -1,0 +1,69 @@
+def afficher_echiquier(e):
+    print("+---[CODINGAME]---+")
+    for ligne in e:
+        print("|" + ligne + "|")
+    print("+-----------------+")
+
+def hex_to_bin_mvmt(fingerprint):
+    binary_movements = []
+
+    bytes = fingerprint.split(':')
+    for hex_byte in reversed(bytes):
+        binary_string = bin(int(hex_byte, 16))[2:].zfill(8)
+        for i in range(0, 8, 2):
+            binary_movements.append(binary_string[i:i+2])
+    return binary_movements[::-1]
+
+def deplacer(x, y, dx, dy, max_x, max_y):
+    nx, ny = x + dx, y + dy
+    if nx < 0: 
+        nx = 0
+    elif nx >= max_x: 
+        nx = max_x - 1
+    if ny < 0: 
+        ny = 0
+    elif ny >= max_y: 
+        ny = max_y - 1
+    return nx, ny
+
+def appliquer_mvmt(mvmt):
+    echiquier = [[0 for _ in range(17)] for _ in range(9)]
+    x,y = 8,4
+    directions = {"00": (-1, -1), "01": (1, -1), "10": (-1, 1), "11": (1, 1)}
+    #start
+    echiquier[y][x] += 1
+
+    for mvm in mvmt:
+        dx, dy = directions[mvm]
+        x,y = deplacer(x,y,dx,dy,17,9)
+        echiquier[y][x] += 1
+
+    return echiquier, (x,y)
+
+def echiquier_to_str(echiquier, end):
+    symboles = " .o+=*BOX@%&#/^"
+    liste_str = []
+
+    for y,ligne in enumerate(echiquier):
+        ligne_str = ""
+        for x,cell in enumerate(ligne):
+            if (x, y) == (8,4):
+                ligne_str += 'S'
+            elif (x, y) == end:
+                ligne_str += 'E'
+            else:
+                index_symbole = cell%15
+                ligne_str += symboles[index_symbole]
+        liste_str.append(ligne_str)
+
+    return liste_str
+
+fingerprint = input()
+#print(fingerprint)
+mvmTest = hex_to_bin_mvmt(fingerprint)
+#print(mvmTest)
+testEchiquier, end = appliquer_mvmt(mvmTest)
+#print(testEchiquier)
+test = echiquier_to_str(testEchiquier, end)
+#print(test)
+afficher_echiquier(test)
