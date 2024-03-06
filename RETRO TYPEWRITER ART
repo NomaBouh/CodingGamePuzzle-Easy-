@@ -1,0 +1,33 @@
+recipe = input()
+
+abbreviations = {
+    "sp": " ",
+    "bS": "\\",
+    "sQ": "'",
+}
+
+chunks = recipe.split()
+
+current_line = ""
+
+for chunk in chunks:
+    if chunk == "nl":
+        print(current_line)
+        current_line = ""
+        continue
+    num = ""
+    char = ""
+    for c in chunk:
+        if c.isdigit():
+            num += c
+        else:
+            char += c
+    if char in abbreviations:
+        char = abbreviations[char]
+    if num and not char:
+        char = num[-1]
+        num = num[:-1]
+    current_line += char * int(num)
+
+if current_line:
+    print(current_line)
