@@ -1,0 +1,14 @@
+n = int(input())
+q = int(input())
+mimeDict = {}
+for i in range(n):
+    ext, mt = input().split()
+    mimeDict[ext.lower()] = mt
+for i in range(q):
+    fname = input()
+    dotPosition = fname.rfind('.')
+    if dotPosition != -1:
+        extension = fname[dotPosition + 1:].lower()
+        print(mimeDict.get(extension, "UNKNOWN"))
+    else:
+        print("UNKNOWN")
