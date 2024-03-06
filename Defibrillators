@@ -1,0 +1,28 @@
+import sys
+import math
+
+def toRad(degrees):
+    return degrees * math.pi / 180
+
+user_lon = toRad(float(input().replace(',', '.')))
+user_lat = toRad(float(input().replace(',', '.')))
+n = int(input())
+
+closest_defib_name = ""
+min_distance = float("inf")
+
+for i in range(n):
+    defib = input().split(';')
+    defib_lon = toRad(float(defib[4].replace(',', '.')))
+    defib_lat = toRad(float(defib[5].replace(',', '.')))
+
+    x = (defib_lon - user_lon) * math.cos((user_lat + defib_lat) / 2)
+    y = defib_lat - user_lat
+    distance = math.sqrt(x**2 + y**2) * 6371
+
+    if distance < min_distance:
+        min_distance = distance
+        closest_defib_name = defib[1]
+
+
+print(closest_defib_name)
