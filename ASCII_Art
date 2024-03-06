@@ -1,0 +1,21 @@
+l = int(input())
+h = int(input())
+t = input().upper()
+
+ascii_dict = {}
+
+for i in range(h):
+    row = input()
+    for j in range(27):
+        start_idx = j * l
+        end_idx = start_idx + l
+        letter = chr(65 + j) if j < 26 else '?'
+        if letter not in ascii_dict:
+            ascii_dict[letter] = []
+        ascii_dict[letter].append(row[start_idx:end_idx])
+for i in range(h):
+    for char in t:
+        if char not in ascii_dict:
+            char = '?'
+        print(ascii_dict[char][i], end='')
+    print()
