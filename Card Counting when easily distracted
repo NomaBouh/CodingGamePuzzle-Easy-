@@ -1,0 +1,31 @@
+streamOfConsciousness = input()
+bustThreshold = int(input())
+
+valid_cards = "A23456789TJQK"
+
+sequences = streamOfConsciousness.split('.')
+
+sequencesValid = []
+for k in sequences:
+    valid = True
+    for i in k:
+        if not(i in valid_cards):
+            valid = False
+    if valid:
+        sequencesValid.append(k)
+
+from collections import Counter
+observed_cards = "".join(sequencesValid)
+observed_count = Counter(observed_cards)
+
+deck_count = Counter({card: 4 for card in valid_cards})
+
+for card, count in observed_count.items():
+    deck_count[card] -= count
+
+cards_less_than_threshold = sum(count for card, count in deck_count.items() if card.isdigit() and int(card) < bustThreshold) + deck_count['A'] * (bustThreshold > 1)
+
+total_remaining_cards = sum(deck_count.values())
+percentageChance = round((cards_less_than_threshold / total_remaining_cards) * 100) if total_remaining_cards else 0
+
+print(str(percentageChance)+"%")
