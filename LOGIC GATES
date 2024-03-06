@@ -1,0 +1,35 @@
+n = int(input())
+m = int(input())
+
+input_signals = {}
+for _ in range(n):
+    input_name, input_signal = input().split()
+    input_signals[input_name] = input_signal
+
+output_configurations = []
+for _ in range(m):
+    output_name, gate_type, input_name_1, input_name_2 = input().split()
+    output_configurations.append((output_name, gate_type, input_name_1, input_name_2))
+
+def apply_gate(gate_type, signal_1, signal_2):
+    result_signal = ""
+    for bit_1, bit_2 in zip(signal_1, signal_2):
+        if gate_type == "AND":
+            result_signal += '-' if bit_1 == '-' and bit_2 == '-' else '_'
+        elif gate_type == "OR":
+            result_signal += '-' if bit_1 == '-' or bit_2 == '-' else '_'
+        elif gate_type == "XOR":
+            result_signal += '-' if bit_1 != bit_2 else '_'
+        elif gate_type == "NAND":
+            result_signal += '_' if bit_1 == '-' and bit_2 == '-' else '-'
+        elif gate_type == "NOR":
+            result_signal += '_' if bit_1 == '-' or bit_2 == '-' else '-'
+        elif gate_type == "NXOR":
+            result_signal += '_' if bit_1 != bit_2 else '-'
+    return result_signal
+
+for output_name, gate_type, input_name_1, input_name_2 in output_configurations:
+    signal_1 = input_signals[input_name_1]
+    signal_2 = input_signals[input_name_2]
+    output_signal = apply_gate(gate_type, signal_1, signal_2)
+    print(f"{output_name} {output_signal}")
