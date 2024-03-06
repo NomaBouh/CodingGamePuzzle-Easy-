@@ -1,0 +1,36 @@
+from collections import deque
+
+w, h = [int(i) for i in input().split()]
+maze_input = []
+for i in range(h):
+    row = input()
+    maze_input.append(row)
+
+maze = [list(row) for row in maze_input]
+start = None
+for i in range(h):
+    for j in range(w):
+        if maze[i][j] == 'S':
+            start = (i, j)
+            maze[i][j] = '0'  
+
+directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+queue = deque([(start[0], start[1], 0)])
+while queue:
+    r, c, moves = queue.popleft()
+    for dr, dc in directions:
+        nr, nc = (r + dr) % h, (c + dc) % w
+        if maze[nr][nc] in '.': 
+            maze[nr][nc] = chr(48 + (moves + 1) % 36) if moves + 1 < 10 else chr(55 + (moves + 1))  # Convert to character
+            queue.append((nr, nc, moves + 1))
+
+for i in range(h):
+    for j in range(w):
+        if maze[i][j] == '.':
+            maze[i][j] = '.'
+
+output_maze = [''.join(row) for row in maze]
+
+for k in range(len(output_maze)):
+    print(output_maze[k])
