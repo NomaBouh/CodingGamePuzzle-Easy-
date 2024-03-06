@@ -1,0 +1,14 @@
+import sys
+import math
+
+n = int(input())
+pi = [int(input()) for _ in range(n)]
+pi.sort()
+diffMin = float('inf')
+
+for i in range(1,n):
+    diff = pi[i] - pi[i-1]
+    if diff < diffMin:
+        diffMin = diff
+
+print(diffMin)
