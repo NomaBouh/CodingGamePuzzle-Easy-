@@ -1,0 +1,43 @@
+n = int(input())
+m = []
+for i in range(n):
+    m.append(input())
+
+grid = [list(line) for line in m]
+visited = [[False] * n for _ in range(n)]
+
+directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+def dfs(x, y, expected_char):
+    if not (0 <= x < n and 0 <= y < n) or visited[x][y] or grid[x][y] != expected_char:
+        return False
+    
+    visited[x][y] = True
+    if expected_char == 'z':
+        return True
+    
+    next_char = chr(ord(expected_char) + 1)
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if dfs(nx, ny, next_char):
+            return True
+    
+    visited[x][y] = False
+    return False
+
+for i in range(n):
+    for j in range(n):
+        if grid[i][j] == 'a' and not visited[i][j]:
+            if dfs(i, j, 'a'):
+                break
+
+for i in range(n):
+    for j in range(n):
+        if not visited[i][j]:
+            grid[i][j] = '-'
+
+output_m = [''.join(row) for row in grid]
+output_m
+
+for k in range(len(output_m)):
+    print(output_m[k])
