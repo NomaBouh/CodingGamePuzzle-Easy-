@@ -1,0 +1,47 @@
+import re
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def main():
+    N = int(input())
+    map = {}
+    gen = 1001
+    for _ in range(N):
+        name, value = input().split()
+        map[name] = [int(value), 1]
+
+    c = input()
+
+    p1 = re.compile(r"(\([^()\[\]]+\)|\[[^()\[\]]+\])")
+    p2 = re.compile(r"(\w+)")
+
+    p = ""
+    while p != c:
+        p = c
+        for m1 in p1.finditer(c):
+            s = m1.group(1).startswith("(")
+            sub = p2.finditer(m1.group(1))
+            ncode = "HSH" + str(gen)
+            gen += 1
+            nV = [0, 1] if s else [1, 0]
+            for match in sub:
+                pV = map[match.group(1)]
+                if s:
+                    nV[0] = nV[0] * pV[1] + nV[1] * pV[0]
+                    nV[1] *= pV[1]
+                else:
+                    nV[1] = nV[1] * pV[0] + nV[0] * pV[1]
+                    nV[0] *= pV[0]
+            
+            d1, d2 = nV
+            d = gcd(d1, d2)
+            map[ncode] = [nV[0] // d, nV[1] // d]
+            c = re.sub(re.escape(m1.group(1)), ncode, c, 1)
+
+    print(f"{1.0 * map[c][0] / map[c][1]:.1f}")
+
+if __name__ == "__main__":
+    main()
