@@ -1,0 +1,47 @@
+W, H, t1, t2, t3 = [int(i) for i in input().split()]
+picture_1 = []
+picture_2 = []
+for i in range(H):
+    first_picture_row, second_picture_row = input().split()
+    picture_1.append(first_picture_row)
+    picture_2.append(second_picture_row)
+
+
+asteroids = {}
+for y in range(H):
+    for x in range(W):
+        char = picture_1[y][x]
+        if char != '.':
+            if char not in asteroids:
+                asteroids[char] = [(x, y), None]
+for y in range(H):
+    for x in range(W):
+        char = picture_2[y][x]
+        if char != '.':
+            if char in asteroids and asteroids[char][1] is None:
+                asteroids[char][1] = (x, y)
+
+t3_positions = {}
+for asteroid, positions in asteroids.items():
+    if positions[1] is not None: 
+        dx = (positions[1][0] - positions[0][0]) / (t2 - t1)
+        dy = (positions[1][1] - positions[0][1]) / (t2 - t1)
+        x3 = positions[1][0] + dx * (t3 - t2)
+        y3 = positions[1][1] + dy * (t3 - t2)
+        if x3 < 0 or y3 < 0:
+            x3 = -1
+        t3_positions[asteroid] = (int(x3), int(y3))
+
+sky_at_t3 = [['.' for _ in range(W)] for _ in range(H)]
+
+for asteroid, position in sorted(t3_positions.items()):
+    x, y = position
+    if 0 <= x < W and 0 <= y < H:
+        current_asteroid = sky_at_t3[y][x]
+        if current_asteroid == '.' or asteroid < current_asteroid:
+            sky_at_t3[y][x] = asteroid
+
+output_sky = [''.join(row) for row in sky_at_t3]
+
+for k in range(len(output_sky)):
+    print(output_sky[k])
