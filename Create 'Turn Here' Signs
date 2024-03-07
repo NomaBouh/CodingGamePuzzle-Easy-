@@ -1,0 +1,22 @@
+def arrowMaker():
+    direction, n, h, e, s, a  = input().split()
+    n, h, e, s, a = map(int, [n, h, e, s, a])
+    arrow = ">" if direction == "right" else "<"
+    msg = ((arrow * e + s * " ") * n).strip()
+    inv = []
+
+    if direction == "right":
+        for k in range(h):
+            if k < (h/2):
+                print(k*a*" " + msg)
+                inv.append(k*a*" " + msg)
+    else:
+        for k in range(h):
+            if k < (h/2):
+                print((int(h/2)-k)*a*" " + msg)
+                inv.append((int(h/2)-k)*a*" " + msg)
+
+    for k in range(len(inv)-1):
+        print(inv[len(inv)-2-k])
+
+arrowMaker()
