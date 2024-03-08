@@ -1,0 +1,30 @@
+def resolve_query(n, definitions, query):
+    arrays = {}
+    for definition in definitions:
+        parts = definition.split(" = ")
+        array_info, values_str = parts[0], parts[1]
+        array_name, indices_str = array_info.split('[')
+        start_index, end_index = map(int, indices_str[:-1].split('..'))
+        values = list(map(int, values_str.split()))
+        array_values = {index: value for index, value in zip(range(start_index, end_index + 1), values)}
+        arrays[array_name] = array_values
+
+    def resolve(query):
+        if "[" not in query:
+            return int(query)
+        arr, idx_query = query.split("[", 1)
+        idx_query = idx_query[:-1]
+        resolved_idx = resolve(idx_query)
+        return arrays[arr][resolved_idx]
+        
+    return resolve(query)
+
+n = int(input())
+array_definitions = []
+for i in range(n):
+    assignment = input()
+    array_definitions.append(assignment)
+x = input()
+
+result = resolve_query(n, array_definitions, x)
+print(result)
