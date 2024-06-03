@@ -1,0 +1,57 @@
+def simulate_match(player1, player2):
+    num1, sign1 = player1
+    num2, sign2 = player2
+    
+    # Define the rules for winning
+    wins = {
+        'R': {'C', 'L'},
+        'P': {'R', 'S'},
+        'C': {'P', 'L'},
+        'L': {'S', 'P'},
+        'S': {'R', 'C'}
+    }
+    
+    if sign1 == sign2:
+        # Lower number wins in case of a tie
+        return player1 if num1 < num2 else player2
+    elif sign2 in wins[sign1]:
+        return player1
+    else:
+        return player2
+
+def rock_paper_scissors_lizard_spock(players):
+    opponents = {num: [] for num, sign in players}
+    
+    # Tournament processing
+    while len(players) > 1:
+        new_round = []
+        for i in range(0, len(players), 2):
+            player1 = players[i]
+            player2 = players[i + 1]
+            winner = simulate_match(player1, player2)
+            loser = player1 if winner == player2 else player2
+            
+            # Update the list of opponents defeated by the winner
+            # Appending to maintain order of defeats
+            opponents[winner[0]].append(loser[0])
+            
+            # Winner goes to the next round
+            new_round.append(winner)
+        players = new_round
+    
+    winner = players[0][0]
+    # No sorting, maintain the order of defeat
+    winner_opponents = opponents[winner]
+    return winner, winner_opponents
+
+# Example usage:
+n = int(input())
+input_data = []
+for k in range(n):
+    p, l = input().split()
+    p = int(p)  # Ensure the player number is treated as an integer
+    input_data.append((p, l))  # Use tuple for consistency
+
+winner, history = rock_paper_scissors_lizard_spock(input_data)
+print(winner)
+print(" ".join(map(str, history)))
